@@ -1,10 +1,12 @@
 package com.dsaiztc.dropboxtest;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,7 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dropbox.sync.android.DbxAccount;
@@ -22,10 +24,14 @@ import com.dropbox.sync.android.DbxException.Unauthorized;
 import com.dropbox.sync.android.DbxFileInfo;
 import com.dropbox.sync.android.DbxFileSystem;
 import com.dropbox.sync.android.DbxPath;
+import com.dsaiztc.dropboxtest.adapter.ItemAdapter;
+import com.dsaiztc.dropboxtest.adapter.ListItem;
 
 public class MainActivity extends Activity
 {
 	private final String TAG = MainActivity.class.getSimpleName();
+	
+	private final static DateFormat DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 
 	private static final String appKey = "3hg2xk0qief0orz";
 	private static final String appSecret = "xu2bl7v74crrj7h";
@@ -39,18 +45,23 @@ public class MainActivity extends Activity
 	private DbxFileSystem mDbxFileSystem;
 	private List<DbxFileInfo> mListDbxFileInfo;
 
-	private TextView textView1;
+	private ListView mListView;
+	
+	private List<ListItem> mItems = new ArrayList<ListItem>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
+		requestWindowFeature(android.view.Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		mActivity = this;
 
 		setContentView(R.layout.activity_main);
 
-		textView1 = (TextView) findViewById(R.id.textView1);
+		mListView = (ListView) findViewById(R.id.listView1);
+		mListView.setAdapter(new ItemAdapter(this, mItems));
 
 		mDbxAccountManager = DbxAccountManager.getInstance(getApplicationContext(), appKey, appSecret);
 		mListDbxFileInfo = new ArrayList<DbxFileInfo>();
@@ -124,27 +135,12 @@ public class MainActivity extends Activity
 
 	private class ShowLibraryTask extends AsyncTask<Void, DbxPath, Void>
 	{
-		ProgressDialog mProgressDialog;
-
-		public ShowLibraryTask()
-		{
-			mProgressDialog = new ProgressDialog(mActivity);
-			mProgressDialog.setTitle("Obteniendo datos de Dropbox");
-			mProgressDialog.setMessage("Conectando con Dropbox");
-		}
-
 		@Override
 		protected void onPreExecute()
 		{
-			mProgressDialog.show();
-			textView1.setText("");
-		}
-
-		@Override
-		protected void onProgressUpdate(DbxPath... progress)
-		{
-			mProgressDialog.setMessage("Accediendo a " + progress[0].getParent());
-			textView1.append(progress[0].getName() + "\n");
+			ActionBar ab = getActionBar();
+		    ab.setTitle("Conectando...");
+			setProgressBarIndeterminateVisibility(true);
 		}
 
 		@Override
@@ -165,14 +161,6 @@ public class MainActivity extends Activity
 			{
 				mDbxFileSystem.awaitFirstSync();
 				getList(mDbxFileSystem.listFolder(DbxPath.ROOT));
-
-				if (mListDbxFileInfo != null)
-				{
-					for (DbxFileInfo dfi : mListDbxFileInfo)
-					{
-						publishProgress(dfi.path);
-					}
-				}
 			}
 			catch (DbxException e)
 			{
@@ -184,10 +172,12 @@ public class MainActivity extends Activity
 		@Override
 		protected void onPostExecute(Void result)
 		{
-			if (mProgressDialog.isShowing())
-			{
-				mProgressDialog.dismiss();
-			}
+			ActionBar ab = getActionBar();
+		    ab.setTitle(R.string.app_name);
+		    
+			setProgressBarIndeterminateVisibility(false);
+			
+			updateUI();
 		}
 	}
 
@@ -209,12 +199,22 @@ public class MainActivity extends Activity
 			else
 			{
 				String[] s = dfi.path.getName().split("\\.");
-				Log.d(TAG, s[s.length - 1]);
 				if (s[s.length - 1].equalsIgnoreCase("epub"))
 				{
 					mListDbxFileInfo.add(dfi);
 				}
 			}
 		}
+	}
+	
+	private void updateUI() 
+	{
+		for (DbxFileInfo dfi : mListDbxFileInfo)
+		{
+			String[] s = dfi.path.getName().split("\\.");
+			mItems.add(new ListItem(R.drawable.icon_book, s[0], getString(R.string.modified_date) + " " + DATE_FORMAT.format(dfi.modifiedTime)));
+		}
+		
+		mListView.setAdapter(new ItemAdapter(this, mItems));
 	}
 }

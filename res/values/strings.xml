@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     
     <string name="disconnect">Desconectar</string>
+    <string name="modified_date">Fecha de modificación:</string>
 
 </resources>

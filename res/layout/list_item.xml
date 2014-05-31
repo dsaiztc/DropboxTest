@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:padding="6dip" >
+
+    <ImageView
+        android:id="@+id/list_item_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:contentDescription="TODO"
+        android:src="@drawable/icon_book" />
+
+    <TextView
+        android:id="@+id/list_item_secondLine"
+        android:layout_width="fill_parent"
+        android:layout_height="26dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/list_item_icon"
+        android:ellipsize="marquee"
+        android:paddingLeft="10dp"
+        android:singleLine="true"
+        android:text="Last draw: December 2014"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/list_item_firstLine"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/list_item_secondLine"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toRightOf="@id/list_item_icon"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="Group name"
+        android:textSize="20sp" />
+
+</RelativeLayout>
