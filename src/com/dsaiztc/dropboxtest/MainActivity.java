@@ -208,7 +208,12 @@ public class MainActivity extends Activity
 			}
 			else
 			{
-				mListDbxFileInfo.add(dfi);
+				String[] s = dfi.path.getName().split("\\.");
+				Log.d(TAG, s[s.length - 1]);
+				if (s[s.length - 1].equalsIgnoreCase("epub"))
+				{
+					mListDbxFileInfo.add(dfi);
+				}
 			}
 		}
 	}
