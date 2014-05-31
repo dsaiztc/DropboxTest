@@ -7,5 +7,7 @@
     
     <string name="disconnect">Desconectar</string>
     <string name="modified_date">Fecha de modificación:</string>
+    <string name="order_by_date">Ordenar por fecha</string>
+    <string name="order_by_name">Ordenar por nombre</string>
 
 </resources>

@@ -2,6 +2,8 @@ package com.dsaiztc.dropboxtest;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -30,7 +32,7 @@ import com.dsaiztc.dropboxtest.adapter.ListItem;
 public class MainActivity extends Activity
 {
 	private final String TAG = MainActivity.class.getSimpleName();
-	
+
 	private final static DateFormat DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 
 	private static final String appKey = "3hg2xk0qief0orz";
@@ -46,14 +48,14 @@ public class MainActivity extends Activity
 	private List<DbxFileInfo> mListDbxFileInfo;
 
 	private ListView mListView;
-	
-	private List<ListItem> mItems = new ArrayList<ListItem>();
+
+	private List<ListItem> mItems;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
+
 		requestWindowFeature(android.view.Window.FEATURE_INDETERMINATE_PROGRESS);
 
 		mActivity = this;
@@ -61,10 +63,11 @@ public class MainActivity extends Activity
 		setContentView(R.layout.activity_main);
 
 		mListView = (ListView) findViewById(R.id.listView1);
-		mListView.setAdapter(new ItemAdapter(this, mItems));
 
 		mDbxAccountManager = DbxAccountManager.getInstance(getApplicationContext(), appKey, appSecret);
 		mListDbxFileInfo = new ArrayList<DbxFileInfo>();
+
+		mItems = new ArrayList<ListItem>();
 	}
 
 	@Override
@@ -101,6 +104,14 @@ public class MainActivity extends Activity
 			case R.id.action_disconnect:
 				mDbxAccountManager.getLinkedAccount().unlink();
 				finish();
+				return true;
+			case R.id.action_order_by_date:
+				orderByDate();
+				updateUI();
+				return true;
+			case R.id.action_order_by_name:
+				orderByName();
+				updateUI();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -139,7 +150,7 @@ public class MainActivity extends Activity
 		protected void onPreExecute()
 		{
 			ActionBar ab = getActionBar();
-		    ab.setTitle("Conectando...");
+			ab.setTitle("Cargando...");
 			setProgressBarIndeterminateVisibility(true);
 		}
 
@@ -159,7 +170,12 @@ public class MainActivity extends Activity
 
 			try
 			{
-				mDbxFileSystem.awaitFirstSync();
+				if (!mDbxFileSystem.hasSynced())
+				{
+					mDbxFileSystem.awaitFirstSync();
+				}
+
+				mListDbxFileInfo = new ArrayList<DbxFileInfo>();
 				getList(mDbxFileSystem.listFolder(DbxPath.ROOT));
 			}
 			catch (DbxException e)
@@ -173,14 +189,20 @@ public class MainActivity extends Activity
 		protected void onPostExecute(Void result)
 		{
 			ActionBar ab = getActionBar();
-		    ab.setTitle(R.string.app_name);
-		    
+			ab.setTitle(R.string.app_name);
+
 			setProgressBarIndeterminateVisibility(false);
-			
+
+			orderByName();
 			updateUI();
 		}
 	}
 
+	/**
+	 * Get the list of all DbxFileInfo with epub extension and saves it to local list
+	 * 
+	 * @param list List of DbxFileInfo on Root Dropbox folder
+	 */
 	private void getList(List<DbxFileInfo> list)
 	{
 		for (DbxFileInfo dfi : list)
@@ -206,15 +228,44 @@ public class MainActivity extends Activity
 			}
 		}
 	}
-	
-	private void updateUI() 
+
+	/**
+	 * Read the local list of DbxFileInfo and updates the UI (updates the ListView)
+	 */
+	private void updateUI()
 	{
+		mItems = new ArrayList<ListItem>();
+
 		for (DbxFileInfo dfi : mListDbxFileInfo)
 		{
 			String[] s = dfi.path.getName().split("\\.");
 			mItems.add(new ListItem(R.drawable.icon_book, s[0], getString(R.string.modified_date) + " " + DATE_FORMAT.format(dfi.modifiedTime)));
 		}
-		
+
 		mListView.setAdapter(new ItemAdapter(this, mItems));
+	}
+
+	private void orderByDate()
+	{
+		Collections.sort(mListDbxFileInfo, new Comparator<DbxFileInfo>()
+		{
+			public int compare(DbxFileInfo o1, DbxFileInfo o2)
+			{
+				if (o1.modifiedTime == null || o2.modifiedTime == null) return 0;
+				return o1.modifiedTime.compareTo(o2.modifiedTime);
+			}
+		});
+	}
+	
+	private void orderByName()
+	{
+		Collections.sort(mListDbxFileInfo, new Comparator<DbxFileInfo>()
+		{
+			public int compare(DbxFileInfo o1, DbxFileInfo o2)
+			{
+				if (o1.path.getName() == null || o2.path.getName() == null) return 0;
+				return o1.path.getName().compareTo(o2.path.getName());
+			}
+		});
 	}
 }
