@@ -48,8 +48,8 @@ public class MainActivity extends Activity
 
 	private final static DateFormat DATE_FORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 
-	private static final String appKey = "3hg2xk0qief0orz";
-	private static final String appSecret = "xu2bl7v74crrj7h";
+	private static final String appKey = "ma8eek6b9qmw2yq";
+	private static final String appSecret = "7ueeyx17dy7mfnl";
 
 	private static final int REQUEST_LINK_TO_DBX = 0;
 
@@ -77,16 +77,6 @@ public class MainActivity extends Activity
 		mListEbook = new ArrayList<Ebook>();
 
 		mItems = new ArrayList<ListItem>();
-
-		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-		{
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View view, int position, long arg)
-			{
-				Ebook ebook = (Ebook) adapter.getItemAtPosition(position);
-				// TODO Mostrar datos del ebook
-			}
-		});
 	}
 
 	@Override
@@ -311,8 +301,37 @@ public class MainActivity extends Activity
 
 		for (Ebook ebook : mListEbook)
 		{
-			String[] s = ebook.getDbxFileInfo().path.getName().split("\\.");
-			mItems.add(new ListItem(R.drawable.icon_book, s[0], getString(R.string.modified_date) + " " + DATE_FORMAT.format(ebook.getDbxFileInfo().modifiedTime)));
+			// TODO Añadir los elementos de metadata
+			ListItem item = new ListItem();
+
+			if (ebook.getDrawable() != null)
+			{
+				item.setIconDrawable(ebook.getDrawable());
+			}
+			else
+			{
+				item.setIcon(R.drawable.icon_book);
+			}
+
+			if (ebook.getTitle() != null)
+			{
+				item.setFirstLine(ebook.getTitle());
+			}
+			else
+			{
+				item.setFirstLine(ebook.getDbxFileInfo().path.getName().split("\\.")[0]);
+			}
+
+			if (ebook.getAuthor() != null)
+			{
+				item.setSecondLine("Autor: " + ebook.getAuthor());
+			}
+			else
+			{
+				item.setSecondLine("Autor: No disponible");
+			}
+
+			mItems.add(item);
 		}
 
 		mListView.setAdapter(new ItemAdapter(this, mItems));
@@ -342,7 +361,22 @@ public class MainActivity extends Activity
 		{
 			public int compare(Ebook o1, Ebook o2)
 			{
-				if (o1.getDbxFileInfo().path.getName() == null || o2.getDbxFileInfo().path.getName() == null) return 0;
+				if (o1.getDbxFileInfo().path.getName() == null || o2.getDbxFileInfo().path.getName() == null)
+				{
+					return 0;
+				}
+				if (o1.getTitle() == null && o2.getTitle() != null)
+				{
+					return o1.getDbxFileInfo().path.getName().compareTo(o2.getTitle());
+				}
+				if (o1.getTitle() != null && o2.getTitle() == null)
+				{
+					return o1.getTitle().compareTo(o2.getDbxFileInfo().path.getName());
+				}
+				if (o1.getTitle() != null && o2.getTitle() != null)
+				{
+					return o1.getTitle().compareTo(o2.getTitle());
+				}
 				return o1.getDbxFileInfo().path.getName().compareTo(o2.getDbxFileInfo().path.getName());
 			}
 		});

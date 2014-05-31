@@ -30,7 +30,7 @@
             android:name="com.dropbox.client2.android.AuthActivity"
             android:launchMode="singleTask" >
             <intent-filter>
-                <data android:scheme="db-3hg2xk0qief0orz" />
+                <data android:scheme="db-ma8eek6b9qmw2yq" />
 
                 <action android:name="android.intent.action.VIEW" />
 

@@ -68,7 +68,14 @@ public class ItemAdapter extends BaseAdapter
 		TextView secondLine = (TextView) rowView.findViewById(R.id.list_item_secondLine);
 
 		ListItem item = this.items.get(position);
-		icon.setImageResource(item.getIcon());
+		if (item.getIcon() != -1)
+		{
+			icon.setImageResource(item.getIcon());
+		}
+		else
+		{
+			icon.setImageDrawable(item.getIconDrawable());
+		}
 		firstLine.setText(item.getFirstLine());
 		secondLine.setText(item.getSecondLine());
 

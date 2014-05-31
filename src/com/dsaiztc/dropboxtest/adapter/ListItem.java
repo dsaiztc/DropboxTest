@@ -1,5 +1,7 @@
 package com.dsaiztc.dropboxtest.adapter;
 
+import android.graphics.drawable.Drawable;
+
 /**
  * Class that adapts data to a basic ListView with icon, text1 and text2
  * 
@@ -12,6 +14,8 @@ public class ListItem
 	 * Icon showed at left
 	 */
 	private int mIcon;
+	
+	private Drawable mIconDrawable;
 	/**
 	 * First line text
 	 */
@@ -31,8 +35,25 @@ public class ListItem
 	public ListItem(int icon, String firstLine, String secondLine)
 	{
 		this.mIcon = icon;
+		this.mIconDrawable = null;
 		this.mFirstLine = firstLine;
 		this.mSecondLine = secondLine;
+	}
+	
+	public ListItem(Drawable iconDrawable, String firstLine, String secondLine)
+	{
+		this.mIcon = -1;
+		this.mIconDrawable = iconDrawable;
+		this.mFirstLine = firstLine;
+		this.mSecondLine = secondLine;
+	}
+	
+	public ListItem()
+	{
+		this.mIcon = -1;
+		this.mIconDrawable = null;
+		this.mFirstLine = null;
+		this.mSecondLine = null;
 	}
 
 	/**
@@ -50,9 +71,9 @@ public class ListItem
 	 * 
 	 * @param mIcon Icon showed at left resource ID
 	 */
-	public void setIcon(int mIcon)
+	public void setIcon(int icon)
 	{
-		this.mIcon = mIcon;
+		this.mIcon = icon;
 	}
 
 	/**
@@ -93,5 +114,15 @@ public class ListItem
 	public void setSecondLine(String secondLine)
 	{
 		this.mSecondLine = secondLine;
+	}
+
+	public Drawable getIconDrawable()
+	{
+		return mIconDrawable;
+	}
+
+	public void setIconDrawable(Drawable iconDrawable)
+	{
+		this.mIconDrawable = iconDrawable;
 	}
 }
