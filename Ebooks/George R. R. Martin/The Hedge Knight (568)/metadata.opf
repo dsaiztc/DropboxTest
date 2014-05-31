@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uuid_id">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+        <dc:identifier opf:scheme="calibre" id="calibre_id">568</dc:identifier>
+        <dc:identifier opf:scheme="uuid" id="uuid_id">8dd1b1d3-7eb7-47d8-9c9e-381b9a04f148</dc:identifier>
+        <dc:title>The Hedge Knight</dc:title>
+        <dc:creator opf:file-as="Martin, George R. R." opf:role="aut">George R. R. Martin</dc:creator>
+        <dc:contributor opf:file-as="calibre" opf:role="bkp">calibre (0.9.30) [http://calibre-ebook.com]</dc:contributor>
+        <dc:date>0101-01-01T00:00:00+00:00</dc:date>
+        <dc:language>es</dc:language>
+        <meta content="{&quot;George R. R. Martin&quot;: &quot;&quot;}" name="calibre:author_link_map"/>
+        <meta content="Tales of Dunk and Egg" name="calibre:series"/>
+        <meta content="1" name="calibre:series_index"/>
+        <meta content="0" name="calibre:rating"/>
+        <meta content="2013-01-13T10:22:51+00:00" name="calibre:timestamp"/>
+        <meta content="The Hedge Knight" name="calibre:title_sort"/>
+    </metadata>
+    <guide>
+        <reference href="cover.jpg" type="cover" title="Portada"/>
+    </guide>
+</package>

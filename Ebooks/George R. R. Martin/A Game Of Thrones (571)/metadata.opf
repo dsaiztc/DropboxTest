@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uuid_id">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+        <dc:identifier opf:scheme="calibre" id="calibre_id">571</dc:identifier>
+        <dc:identifier opf:scheme="uuid" id="uuid_id">68f107c5-fa9c-4beb-8532-54103992be98</dc:identifier>
+        <dc:title>A Game Of Thrones</dc:title>
+        <dc:creator opf:file-as="Martin, George R. R." opf:role="aut">George R. R. Martin</dc:creator>
+        <dc:contributor opf:file-as="calibre" opf:role="bkp">calibre (0.9.14) [http://calibre-ebook.com]</dc:contributor>
+        <dc:date>2011-03-21T18:30:00+00:00</dc:date>
+        <dc:publisher>Random House Publishing Group</dc:publisher>
+        <dc:identifier opf:scheme="MOBI-ASIN">bf7a7096-0e0f-4ed3-af21-67f56424a493</dc:identifier>
+        <dc:identifier opf:scheme="ISBN">9780553897845</dc:identifier>
+        <dc:language>eng</dc:language>
+        <meta content="{&quot;George R. R. Martin&quot;: &quot;&quot;}" name="calibre:author_link_map"/>
+        <meta content="A Song of Ice and Fire" name="calibre:series"/>
+        <meta content="1" name="calibre:series_index"/>
+        <meta content="0" name="calibre:rating"/>
+        <meta content="2013-01-13T11:30:42+00:00" name="calibre:timestamp"/>
+        <meta content="A Game Of Thrones" name="calibre:title_sort"/>
+    </metadata>
+    <guide>
+        <reference href="cover.jpg" type="cover" title="Portada"/>
+    </guide>
+</package>
